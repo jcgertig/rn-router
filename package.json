@@ -15,7 +15,11 @@
     "react native",
     "React Native",
     "react",
-    "react-router"
+    "react-router",
+    "react-component",
+    "react-native",
+    "ios",
+    "android"
   ],
   "author": "Jonathan Gertig <jcgertig@gmail.com>",
   "license": "MIT",
