@@ -1,6 +1,6 @@
 {
   "name": "react-router-native",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "React native routing system based on react router",
   "main": "index.js",
   "repository": {
