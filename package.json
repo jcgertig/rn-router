@@ -1,5 +1,5 @@
 {
-  "name": "react-router-native",
+  "name": "rn-router",
   "version": "0.1.0",
   "description": "React native routing system based on react router",
   "main": "index.js",
