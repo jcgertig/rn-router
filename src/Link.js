@@ -17,23 +17,30 @@ var Link = React.createClass({
     children: PropTypes.element.isRequired,
     type: PropTypes.oneOf(['Highlight', 'Opacity']),
     underlayColor: PropTypes.string,
-    style: PropTypes.any
+    style: PropTypes.any,
+    transition: PropTypes.any,
+    activeLinkStyle: PropTypes.any,
+    linkStyle: PropTypes.any,
   },
 
   getDefaultProps: function() {
     return {
       type: 'Opacity',
-      style: {}
+      style: {},
     };
   },
 
   handlePress: function() {
-    this.context.transitionTo(this.props.to, this.props.props || {});
+    this.context.transitionTo(this.props.to, this.props.props || {}, this.props.transition);
   },
 
   render: function() {
     var children = Children.map(this.props.children, (child) => {
-      var style = this.props.to === this.context.route.name ? styles.linkActive : styles.link;
+      var style = typeof this.props.linkStyle !== 'undefined' ? this.props.linkStyle : styles.link;
+
+      if (this.props.to === this.context.route.name) {
+        style = typeof this.props.activeLinkStyle !== 'undefined' ? this.props.activeLinkStyle : styles.linkActive;
+      }
 
       if (child.props.style) {
         if (child.props.style instanceof Array) {
