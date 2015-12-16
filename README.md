@@ -1,4 +1,4 @@
-# react-router-native
+# rn-router
 React Native routing system based on react router
 
 # How to use:
@@ -6,7 +6,7 @@ React Native routing system based on react router
 ## Install
 
 ```shell
-npm i --save react-router-native
+npm i --save rn-router
 ```
 
 ## Example - Setup
@@ -17,7 +17,7 @@ npm i --save react-router-native
 'use strict';
 
 var React = require('react-native');
-var ReactRouter = require('react-router-native');
+var ReactRouter = require('rn-router');
 
 var Home = require('./HomeView');
 var Login = require('./LoginView');
@@ -83,7 +83,7 @@ AppRegistry.registerComponent('App', () => App);
 ## Example - Usage ( Link )
 
 ```js
-var ReactRouter = require('react-router-native');
+var ReactRouter = require('rn-router');
 var { Link, Transitions } = ReactRouter;
 
 ...
@@ -119,7 +119,7 @@ render() {
 ## Example - Usage ( transitionTo / transitionBack )
 
 ```js
-var ReactRouter = require('react-router-native');
+var ReactRouter = require('rn-router');
 var { Transitions } = ReactRouter;
 
 contextTypes: {
