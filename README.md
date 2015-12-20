@@ -94,6 +94,8 @@ render() {
       <Link to='home'><Text>Home</Text></Link>
       <Link to='login'><Text>Login</Text></Link>
 
+      <Link toBack={true}><Text>Back</Text></Link>
+
       <Link to='login' transition={Transitions.FloatFromLeft}><Text>Login</Text></Link> // Default transition is FloatFromRight
       <Link to='home' transition={Transitions.FloatFromBottom}><Text>Home</Text></Link>
       <Link to='home' style={styles.linkButton}><Text>Home</Text></Link>

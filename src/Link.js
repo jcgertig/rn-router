@@ -14,6 +14,8 @@ var Link = React.createClass({
   },
 
   propTypes: {
+    to: PropTypes.string.isRequired,
+    toBack: PropTypes.bool.isRequired,
     children: PropTypes.element.isRequired,
     type: PropTypes.oneOf(['Highlight', 'Opacity']),
     underlayColor: PropTypes.string,
@@ -25,13 +27,19 @@ var Link = React.createClass({
 
   getDefaultProps() {
     return {
+      to: '',
+      toBack: false,
       type: 'Opacity',
       style: {},
     };
   },
 
   handlePress() {
-    this.context.transitionTo(this.props.to, this.props.props || {}, this.props.transition);
+    if (this.props.toBack) {
+      this.context.transitionBack();
+    } else {
+      this.context.transitionTo(this.props.to, this.props.props || {}, this.props.transition);
+    }
   },
 
   render() {

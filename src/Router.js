@@ -10,6 +10,7 @@ var Router = React.createClass({
   childContextTypes: {
     platform: PropTypes.string,
     route: PropTypes.object,
+    lastRoute: PropTypes.object,
     transitionTo: PropTypes.func,
     transitionBack: PropTypes.func
   },
@@ -25,6 +26,7 @@ var Router = React.createClass({
     return {
       platform: this.props.platform || 'undefined',
       route: this.state.route,
+      lastRoute: this.state.lastRoute,
       transitionTo: this.transitionTo,
       transitionBack: this.transitionBack
     };
@@ -56,7 +58,6 @@ var Router = React.createClass({
       name: componentProps.name || 'inital route',
       component: componentProps.component,
       props: {},
-      showNavBar: false,
       sceneConfig: Navigator.SceneConfigs.FloatFromRight
     };
   },
@@ -76,7 +77,6 @@ var Router = React.createClass({
         name: name,
         component: component,
         props: props,
-        showNavBar: props.showNavBar || false,
         sceneConfig: sceneConfig || Navigator.SceneConfigs.FloatFromRight
       });
     }
@@ -99,11 +99,6 @@ var Router = React.createClass({
       configureScene: this.configureScene,
       renderScene: this.renderScene
     };
-    if (!this.state.showNavBar) {
-      navProps.navigationBar = (
-        <View style={styles.hidden}></View>
-      );
-    }
 
     return (
       <Navigator
