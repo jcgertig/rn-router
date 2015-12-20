@@ -122,6 +122,8 @@ render() {
 var ReactRouter = require('rn-router');
 var { Transitions } = ReactRouter;
 
+...
+
 contextTypes: {
   transitionTo: React.PropTypes.func,
   transitionBack: React.PropTypes.func
@@ -132,16 +134,16 @@ contextTypes: {
 render() {
   return (
     <View>
-      <TrouchableOpacity onPress={() => { this.context.transitionBack()}}>
+      <TouchableOpacity onPress={() => { this.context.transitionBack()}}>
         <Text>
           Back
         </Text>
-      </TrouchableOpacity>
-      <TrouchableOpacity onPress={() => { this.context.transitionTo('home')}}>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => { this.context.transitionTo('home')}}>
         <Text>
           Home
         </Text>
-      </TrouchableOpacity>
+      </TouchableOpacity>
     </View>
   );
 }

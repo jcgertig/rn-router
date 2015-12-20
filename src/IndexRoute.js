@@ -5,7 +5,7 @@ var { StyleSheet, View } = React;
 
 var IndexRoute = React.createClass({
   displayName: 'IndexRoute',
-  render: function() {
+  render() {
     return (
       <View style={styles.hidden}></View>
     );

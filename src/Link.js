@@ -23,18 +23,18 @@ var Link = React.createClass({
     linkStyle: PropTypes.any,
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       type: 'Opacity',
       style: {},
     };
   },
 
-  handlePress: function() {
+  handlePress() {
     this.context.transitionTo(this.props.to, this.props.props || {}, this.props.transition);
   },
 
-  render: function() {
+  render() {
     var children = Children.map(this.props.children, (child) => {
       var style = typeof this.props.linkStyle !== 'undefined' ? this.props.linkStyle : styles.link;
 

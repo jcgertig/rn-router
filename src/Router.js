@@ -56,6 +56,7 @@ var Router = React.createClass({
       name: componentProps.name || 'inital route',
       component: componentProps.component,
       props: {},
+      showNavBar: false,
       sceneConfig: Navigator.SceneConfigs.FloatFromRight
     };
   },
@@ -75,6 +76,7 @@ var Router = React.createClass({
         name: name,
         component: component,
         props: props,
+        showNavBar: props.showNavBar || false,
         sceneConfig: sceneConfig || Navigator.SceneConfigs.FloatFromRight
       });
     }
@@ -92,13 +94,21 @@ var Router = React.createClass({
   },
 
   render() {
+    var navProps = {
+      initialRoute: this.state.route,
+      configureScene: this.configureScene,
+      renderScene: this.renderScene
+    };
+    if (!this.state.showNavBar) {
+      navProps.navigationBar = (
+        <View style={styles.hidden}></View>
+      );
+    }
+
     return (
       <Navigator
         ref="navigator"
-        navigationBar={(<View style={styles.hidden}></View>)}
-        initialRoute={this.state.route}
-        configureScene={this.configureScene}
-        renderScene={this.renderScene} />
+        {...navProps} />
     );
   }
 });

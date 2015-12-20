@@ -5,7 +5,7 @@ var { StyleSheet, View } = React;
 
 var Route = React.createClass({
   displayName: 'Route',
-  render: function() {
+  render() {
     return (
       <View style={styles.hidden}></View>
     );
