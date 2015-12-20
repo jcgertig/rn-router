@@ -61,7 +61,7 @@ var Link = React.createClass({
       );
     } else {
       return (
-        <TouchableHighlight underlayColor={this.props.underlayColor} style={this.props.style} onPress={this.handlePress}>
+        <TouchableHighlight underlayColor={this.props.underlayColor} style={this.props.style || {}} onPress={this.handlePress}>
           <View>
             {children}
           </View>
