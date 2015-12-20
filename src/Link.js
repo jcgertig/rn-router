@@ -11,6 +11,7 @@ var Link = React.createClass({
   contextTypes: {
     route: PropTypes.object,
     transitionTo: PropTypes.func,
+    transitionBack: PropTypes.func,
   },
 
   propTypes: {
