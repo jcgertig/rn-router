@@ -42,7 +42,7 @@ var Link = React.createClass({
         style = typeof this.props.activeLinkStyle !== 'undefined' ? this.props.activeLinkStyle : styles.linkActive;
       }
 
-      if (child.props.style) {
+      if (typeof child.props.style !== 'undefined') {
         if (child.props.style instanceof Array) {
           style = child.props.style.push(style);
         } else {
@@ -61,7 +61,7 @@ var Link = React.createClass({
       );
     } else {
       return (
-        <TouchableHighlight underlayColor={this.props.underlayColor} style={this.props.style || {}} onPress={this.handlePress}>
+        <TouchableHighlight underlayColor={this.props.underlayColor} style={this.props.style} onPress={this.handlePress}>
           <View>
             {children}
           </View>
