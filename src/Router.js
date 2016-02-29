@@ -41,7 +41,7 @@ var Router = React.createClass({
       return this.getRouteComponent('', child.props.children, child);
     }
     return child;
-  }
+  },
 
   getRouteComponent(name, children, directParent) {
     children = typeof children === 'undefined' ? this.props.children : children;
