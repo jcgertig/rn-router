@@ -47,8 +47,8 @@ var Router = React.createClass({
     children = typeof children === 'undefined' ? this.props.children : children;
 
     let indexRoute = (name === '' || name === '/');
-    let name = name.split('/');
-    let currentName = clone(name).shift();
+    name = this.clone(name).split('/');
+    let currentName = this.clone(name).shift();
 
     var routeComponent = {};
     Children.map(children, (child) => {
