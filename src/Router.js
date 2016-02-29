@@ -22,6 +22,10 @@ var Router = React.createClass({
     };
   },
 
+  clone(array) {
+    return JSON.parse(JSON.stringify(array));
+  }
+
   getChildContext() {
     return {
       platform: this.props.platform || 'undefined',
@@ -32,27 +36,43 @@ var Router = React.createClass({
     };
   },
 
-  getRouteComponent(name, indexRoute) {
-    indexRoute = typeof indexRoute === 'undefined' ? false : indexRoute;
+  _childOr(child) {
+    if (Children.count(child.props.children) > 0) {
+      return this.getRouteComponent('', child.props.children, child);
+    }
+    return child;
+  }
+
+  getRouteComponent(name, children, directParent) {
+    children = typeof children === 'undefined' ? this.props.children : children;
+
+    let indexRoute = (name === '' || name === '/');
+    let name = name.split('/');
+    let currentName = clone(name).shift();
 
     var routeComponent = {};
-    Children.map(this.props.children, (child) => {
+    Children.map(children, (child) => {
       if (indexRoute) {
         if (child.type.displayName === 'IndexRoute') {
-          routeComponent = child.props;
+          routeComponent = this._childOr(child);
         }
-      } else {
-        if (child.props.name === name) {
-          routeComponent = child.props;
-        }
+      } else if (child.props.name === currentName) {
+        routeComponent = this._childOr(child);
       }
     });
 
-    return routeComponent;
+    let routeComponent = routeComponent.props;
+    if (typeof directParent !== 'undefined') {
+      routeComponent.parent = directParent;
+    }
+    return name.length > 1 ?
+      this.getRouteComponent(name.join('/'), routeComponent.props.children, routeComponent)
+      :
+      routeComponent;
   },
 
   getInitalRoute() {
-    var componentProps = this.getRouteComponent('', true);
+    var componentProps = this.getRouteComponent('');
 
     return {
       name: componentProps.name || 'inital route',
