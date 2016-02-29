@@ -24,7 +24,7 @@ var Router = React.createClass({
 
   clone(array) {
     return JSON.parse(JSON.stringify(array));
-  }
+  },
 
   getChildContext() {
     return {
