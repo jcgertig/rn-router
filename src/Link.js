@@ -19,6 +19,7 @@ var Link = React.createClass({
     toBack: PropTypes.bool.isRequired,
     children: PropTypes.any.isRequired,
     type: PropTypes.oneOf(['Highlight', 'Opacity']),
+    props: PropTypes.any,
     underlayColor: PropTypes.string,
     style: PropTypes.any,
     transition: PropTypes.any,

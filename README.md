@@ -141,6 +141,10 @@ render() {
       <Link to='home'><Text>Home</Text></Link>
       <Link to='login'><Text>Login</Text></Link>
 
+      <Link to='users/listing' props={{ page: 2 }}>
+        <Text>Listing Page 2</Text>
+      </Link>
+
       <Link toBack={true}><Text>Back</Text></Link>
 
       <Link to='login' transition={Transitions.FloatFromLeft}><Text>Login</Text></Link> // Default transition is FloatFromRight
@@ -148,6 +152,7 @@ render() {
       <Link to='home' style={styles.linkButton}><Text>Home</Text></Link>
       <Link to='home' activeLinkStyle={styles.highlight}><Text>Home</Text></Link> // Default active style is opacity: 0.5
       <Link to='home'
+        props={{ id: 1 }}
         linkStyle={styles.linkText}
         activeLinkStyle={styles.highlight}>
         <Text>Home</Text>
