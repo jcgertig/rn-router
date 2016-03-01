@@ -106,6 +106,27 @@ this.context.transitionTo('settings/advanced');
 this.context.transitionTo('users/profile', { id: 1 });
 ```
 
+## Example - Usage ( Url Params )
+
+```js
+...
+
+  <Router {...this.props}>
+    <Route name="users">
+      <IndexRoute name="listing" component={UsersListing} />
+      <Route name=":userId" component={UsersProfile} />
+    </Route>
+  </Router>
+
+...
+
+this.context.transitionTo(`users/${id}`);
+
+// UsersProfile
+
+this.props.userId
+```
+
 ## Example - Usage ( Link )
 
 ```js
