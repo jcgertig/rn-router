@@ -7,9 +7,13 @@ var RouteWrapper = React.createClass({
   render() {
     let Parent = this.props.parent;
     let Child = this.props.child;
+    let props = Object.assign({}, this.props);
+    delete props.parent;
+    delete props.child;
+
     return (
-      <Parent {...this.props}>
-        <Child {...this.props} />
+      <Parent {...props}>
+        <Child {...props} />
       </Parent>
     )
   }

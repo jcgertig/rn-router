@@ -80,7 +80,7 @@ var Router = React.createClass({
           routeComponent = this._childOr(name, child, routeProps);
         }
       } else if (child.props.name.indexOf(':') === 0) {
-        routeProps[child.props.name] = currentName;
+        routeProps[child.props.name.replace(':', '')] = currentName;
         routeComponent = this._childOr(name, child, routeProps);
       } else if (child.props.name === currentName) {
         routeComponent = this._childOr(name, child, routeProps);
