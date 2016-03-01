@@ -1,7 +1,9 @@
 'use strict';
 
 var React = require('react-native');
-var { StyleSheet, View, Navigator, Children, PropTypes } = React;
+var { StyleSheet, View, Navigator, Children, PropTypes, cloneElement } = React;
+
+var Wrapper = require('./Wrapper');
 
 var Router = React.createClass({
 
@@ -24,7 +26,26 @@ var Router = React.createClass({
 
   clone(array) {
     return JSON.parse(JSON.stringify(array));
-  }
+  },
+
+  cloneProps(props) {
+    let clone = {
+      name: props.name || '',
+      component: props.component,
+      children: props.children,
+      parent: this.clonePropsBase(props.parent)
+    };
+    return clone;
+  },
+
+  clonePropsBase(props) {
+    if (typeof props === 'undefined') { return props; }
+    let clone = {
+      name: props.name || '',
+      component: props.component,
+    };
+    return clone;
+  },
 
   getChildContext() {
     return {
@@ -36,37 +57,38 @@ var Router = React.createClass({
     };
   },
 
-  _childOr(child) {
-    if (Children.count(child.props.children) > 0) {
-      return this.getRouteComponent('', child.props.children, child);
+  _childOr(name, child) {
+    let props = child.props;
+    if (name.length === 0 && Children.count(props.children) > 0) {
+      props =  this.getRouteComponent('', props.children, props);
     }
-    return child;
-  }
+    return this.cloneProps(props);
+  },
 
   getRouteComponent(name, children, directParent) {
     children = typeof children === 'undefined' ? this.props.children : children;
 
     let indexRoute = (name === '' || name === '/');
-    let name = name.split('/');
-    let currentName = clone(name).shift();
+    name = this.clone(name).split('/');
+    let currentName = name.shift();
 
     var routeComponent = {};
     Children.map(children, (child) => {
       if (indexRoute) {
         if (child.type.displayName === 'IndexRoute') {
-          routeComponent = this._childOr(child);
+          routeComponent = this._childOr(name, child);
         }
       } else if (child.props.name === currentName) {
-        routeComponent = this._childOr(child);
+        routeComponent = this._childOr(name, child);
       }
     });
 
-    let routeComponent = routeComponent.props;
     if (typeof directParent !== 'undefined') {
       routeComponent.parent = directParent;
     }
-    return name.length > 1 ?
-      this.getRouteComponent(name.join('/'), routeComponent.props.children, routeComponent)
+
+    return name.length > 0 ?
+      this.getRouteComponent(name.join('/'), routeComponent.children, routeComponent)
       :
       routeComponent;
   },
@@ -91,7 +113,14 @@ var Router = React.createClass({
     props = typeof props === 'object' ? props : {};
 
     var navigator = this.refs.navigator;
-    var component = this.getRouteComponent(name).component;
+    var componentProps = this.getRouteComponent(name);
+    let component = componentProps.component;
+    console.log(componentProps.parent);
+    if (typeof componentProps.parent !== 'undefined' && typeof componentProps.parent.component !== 'undefined') {
+      component = Wrapper;
+      props = Object.assign({}, props, { parent: componentProps.parent.component, child: componentProps.component });
+    }
+    console.log('render this', component, props);
     if (typeof component !== 'undefined') {
       navigator.push({
         name: name,
@@ -123,7 +152,8 @@ var Router = React.createClass({
     return (
       <Navigator
         ref="navigator"
-        {...navProps} />
+        {...navProps}
+      />
     );
   }
 });
