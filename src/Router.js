@@ -40,7 +40,7 @@ var Router = React.createClass({
     if (Children.count(child.props.children) > 0) {
       return this.getRouteComponent('', child.props.children, child);
     }
-    return child;
+    return child.props;
   },
 
   getRouteComponent(name, children, directParent) {
@@ -61,7 +61,6 @@ var Router = React.createClass({
       }
     });
 
-    let routeComponent = routeComponent.props;
     if (typeof directParent !== 'undefined') {
       routeComponent.parent = directParent;
     }
