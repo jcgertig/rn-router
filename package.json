@@ -1,6 +1,6 @@
 {
   "name": "rn-router",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "React native routing system based on react router",
   "main": "index.js",
   "repository": {

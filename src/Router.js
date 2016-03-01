@@ -57,15 +57,16 @@ var Router = React.createClass({
     };
   },
 
-  _childOr(name, child) {
+  _childOr(name, child, routeProps) {
     let props = child.props;
     if (name.length === 0 && Children.count(props.children) > 0) {
-      props =  this.getRouteComponent('', props.children, props);
+      props =  this.getRouteComponent('', props.children, props, routeProps);
     }
     return this.cloneProps(props);
   },
 
-  getRouteComponent(name, children, directParent) {
+  getRouteComponent(name, children, directParent, routeProps) {
+    routeProps = typeof routeProps === 'undefined' ? {} : routeProps;
     children = typeof children === 'undefined' ? this.props.children : children;
 
     let indexRoute = (name === '' || name === '/');
@@ -76,19 +77,23 @@ var Router = React.createClass({
     Children.map(children, (child) => {
       if (indexRoute) {
         if (child.type.displayName === 'IndexRoute') {
-          routeComponent = this._childOr(name, child);
+          routeComponent = this._childOr(name, child, routeProps);
         }
+      } else if (child.props.name.indexOf(':') === 0) {
+        routeProps[child.props.name] = currentName;
+        routeComponent = this._childOr(name, child, routeProps);
       } else if (child.props.name === currentName) {
-        routeComponent = this._childOr(name, child);
+        routeComponent = this._childOr(name, child, routeProps);
       }
     });
 
     if (typeof directParent !== 'undefined') {
       routeComponent.parent = directParent;
     }
+    routeComponent.routeProps = routeProps;
 
     return name.length > 0 ?
-      this.getRouteComponent(name.join('/'), routeComponent.children, routeComponent)
+      this.getRouteComponent(name.join('/'), routeComponent.children, routeComponent, routeProps)
       :
       routeComponent;
   },
@@ -115,12 +120,11 @@ var Router = React.createClass({
     var navigator = this.refs.navigator;
     var componentProps = this.getRouteComponent(name);
     let component = componentProps.component;
-    console.log(componentProps.parent);
+    props = Object.assign({}, props, componentProps.routeProps);
     if (typeof componentProps.parent !== 'undefined' && typeof componentProps.parent.component !== 'undefined') {
       component = Wrapper;
       props = Object.assign({}, props, { parent: componentProps.parent.component, child: componentProps.component });
     }
-    console.log('render this', component, props);
     if (typeof component !== 'undefined') {
       navigator.push({
         name: name,
