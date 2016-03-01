@@ -4,7 +4,7 @@ var React = require('react-native');
 var { View, Navigator, Children, PropTypes } = React;
 
 var Wrapper = require('./Wrapper');
-var Transitions = require('./Transitions'),
+var Transitions = require('./Transitions');
 
 var Router = React.createClass({
 
