@@ -1,6 +1,17 @@
 # rn-router
 React Native routing system based on react router
 
+# Change Log:
+
+ - _2.0.0_ : Add `None` and `Fade` transitions and default transitions to `None`.
+ This is a breaking change for those relying on a transition when none has been supplied.
+
+ - _1.3.x_ : Add url parameters
+
+ - _1.2.x_ : Add passing of children to parent route
+
+ - _1.1.x_ : Add sub routing
+
 # How to use:
 
 ## Install
@@ -147,7 +158,7 @@ render() {
 
       <Link toBack={true}><Text>Back</Text></Link>
 
-      <Link to='login' transition={Transitions.FloatFromLeft}><Text>Login</Text></Link> // Default transition is FloatFromRight
+      <Link to='login' transition={Transitions.FloatFromLeft}><Text>Login</Text></Link> // Default transition is None
       <Link to='home' transition={Transitions.FloatFromBottom}><Text>Home</Text></Link>
       <Link to='home' style={styles.linkButton}><Text>Home</Text></Link>
       <Link to='home' activeLinkStyle={styles.highlight}><Text>Home</Text></Link> // Default active style is opacity: 0.5
@@ -202,4 +213,25 @@ render() {
   );
 }
 
+```
+
+## Example - Usage ( Transitions )
+
+The available transitions are as follows
+
+```js
+var ReactRouter = require('rn-router');
+var { Transitions } = ReactRouter;
+
+Transitions.FloatFromRight
+Transitions.FloatFromLeft
+Transitions.FloatFromBottom
+Transitions.FloatFromBottomAndroid
+Transitions.FadeAndroid
+Transitions.HorizontalSwipeJump
+Transitions.HorizontalSwipeJumpFromRight
+Transitions.VerticalUpSwipeJump
+Transitions.VerticalDownSwipeJump
+Transitions.None
+Transitions.Fade
 ```

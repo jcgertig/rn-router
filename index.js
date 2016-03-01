@@ -5,5 +5,5 @@ module.exports = {
   IndexRoute: require('./src/IndexRoute'),
   Route: require('./src/Route'),
   Link: require('./src/Link'),
-  Transitions: React.Navigator.SceneConfigs,
+  Transitions: require('./src/Transitions'),
 };

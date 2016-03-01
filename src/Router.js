@@ -1,9 +1,10 @@
 'use strict';
 
 var React = require('react-native');
-var { StyleSheet, View, Navigator, Children, PropTypes, cloneElement } = React;
+var { View, Navigator, Children, PropTypes } = React;
 
 var Wrapper = require('./Wrapper');
+var Transitions = require('./Transitions');
 
 var Router = React.createClass({
 
@@ -74,7 +75,7 @@ var Router = React.createClass({
     let currentName = name.shift();
 
     var routeComponent = {};
-    Children.map(children, (child) => {
+    Children.forEach(children, (child) => {
       if (indexRoute) {
         if (child.type.displayName === 'IndexRoute') {
           routeComponent = this._childOr(name, child, routeProps);
@@ -105,7 +106,7 @@ var Router = React.createClass({
       name: componentProps.name || 'inital route',
       component: componentProps.component,
       props: {},
-      sceneConfig: Navigator.SceneConfigs.FloatFromRight
+      sceneConfig: Transitions.None
     };
   },
 
@@ -130,7 +131,7 @@ var Router = React.createClass({
         name: name,
         component: component,
         props: props,
-        sceneConfig: sceneConfig || Navigator.SceneConfigs.FloatFromRight
+        sceneConfig: sceneConfig || Transitions.None
       });
     }
   },
@@ -159,12 +160,6 @@ var Router = React.createClass({
         {...navProps}
       />
     );
-  }
-});
-
-var styles = StyleSheet.create({
-  hidden: {
-    height: 0,
   }
 });
 
