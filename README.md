@@ -203,3 +203,23 @@ render() {
 }
 
 ```
+
+## Example - Usage ( Transitions )
+
+The available transitions are as follows
+
+```js
+var ReactRouter = require('rn-router');
+var { Transitions } = ReactRouter;
+
+Transitions.FloatFromRight
+Transitions.FloatFromLeft
+Transitions.FloatFromBottom
+Transitions.FloatFromBottomAndroid
+Transitions.FadeAndroid
+Transitions.HorizontalSwipeJump
+Transitions.HorizontalSwipeJumpFromRight
+Transitions.VerticalUpSwipeJump
+Transitions.VerticalDownSwipeJump
+Transitions.None
+```

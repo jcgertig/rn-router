@@ -143,6 +143,7 @@ var Router = React.createClass({
     if (this.state.route !== route) {
       this.setState({ lastRoute: this.state.route, route: route });
     }
+    if (route.sceneConfig === 'NO_TRANSITION') { return; }
     return route.sceneConfig;
   },
 
