@@ -43,7 +43,7 @@ var Router = React.createClass({
     return child.props;
   },
 
-  getRouteComponent(name, children, directParent) {
+  getRouteComponent(name, children) {
     children = typeof children === 'undefined' ? this.props.children : children;
 
     let indexRoute = (name === '' || name === '/');
@@ -61,11 +61,8 @@ var Router = React.createClass({
       }
     });
 
-    if (typeof directParent !== 'undefined') {
-      routeComponent.parent = directParent;
-    }
     return name.length > 1 ?
-      this.getRouteComponent(name.join('/'), routeComponent.props.children, routeComponent)
+      this.getRouteComponent(name.join('/'), routeComponent.props.children)
       :
       routeComponent;
   },
