@@ -3,6 +3,8 @@ React Native routing system based on react router
 
 # Change Log:
 
+- _2.1.0_ : Add `defaultTransition` prop to `Router` allowing to change the default transition from `None`.
+
  - _2.0.0_ : Add `None` and `Fade` transitions and default transitions to `None`.
  This is a breaking change for those relying on a transition when none has been supplied.
 
@@ -33,12 +35,12 @@ var ReactRouter = require('rn-router');
 var Home = require('./HomeView');
 var Login = require('./LoginView');
 
-var { Router, IndexRoute, Route } = ReactRouter;
+var { Router, IndexRoute, Route, Transitions } = ReactRouter;
 
 var Routes = React.createClass({
   render: function() {
     return (
-      <Router {...this.props}>
+      <Router {...this.props} defaultTransition={Transitions.Fade}>
         <IndexRoute name="login" component={Login} />
         <Route name="home" component={Home} />
       </Router>
