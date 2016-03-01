@@ -80,6 +80,32 @@ var App = React.createClass({
 AppRegistry.registerComponent('App', () => App);
 ```
 
+## Example - Usage ( Sub Routes )
+
+```js
+...
+
+  <Router {...this.props}>
+    <IndexRoute name="home" component={Home} />
+    <Route name="settings" component={SettingsLayout}>
+      <IndexRoute name="base" component={BaseSettings} />
+      <Route name="advanced" component={AdvancedSettings} />
+    </Route>
+    <Route name="users">
+      <IndexRoute name="listing" component={UsersListing} />
+      <Route name="profile" component={UsersProfile} />
+    </Route>
+  </Router>
+
+...
+
+this.context.transitionTo('settings'); // goes to 'settings/base'
+this.context.transitionTo('settings/base');
+this.context.transitionTo('settings/advanced');
+
+this.context.transitionTo('users/profile', { id: 1 });
+```
+
 ## Example - Usage ( Link )
 
 ```js
