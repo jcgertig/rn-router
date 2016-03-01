@@ -18,6 +18,17 @@ var Router = React.createClass({
     transitionBack: PropTypes.func
   },
 
+  propTypes: {
+    platform: PropTypes.string,
+    defaultTransition: PropTypes.any.isRequired,
+  },
+
+  getDefaultProps() {
+    return {
+      defaultTransition: Transitions.None
+    };
+  },
+
   getInitialState() {
     return {
       route: this.getInitalRoute(),
@@ -106,7 +117,7 @@ var Router = React.createClass({
       name: componentProps.name || 'inital route',
       component: componentProps.component,
       props: {},
-      sceneConfig: Transitions.None
+      sceneConfig: this.props.defaultTransition
     };
   },
 
@@ -131,7 +142,7 @@ var Router = React.createClass({
         name: name,
         component: component,
         props: props,
-        sceneConfig: sceneConfig || Transitions.None
+        sceneConfig: sceneConfig || this.props.defaultTransition
       });
     }
   },
