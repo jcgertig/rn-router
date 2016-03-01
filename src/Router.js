@@ -36,8 +36,8 @@ var Router = React.createClass({
     };
   },
 
-  _childOr(child) {
-    if (Children.count(child.props.children) > 0) {
+  _childOr(name, child) {
+    if (name.length === 0 && Children.count(child.props.children) > 0) {
       return this.getRouteComponent('', child.props.children, child);
     }
     return child.props;
@@ -48,21 +48,21 @@ var Router = React.createClass({
 
     let indexRoute = (name === '' || name === '/');
     name = this.clone(name).split('/');
-    let currentName = this.clone(name).shift();
+    let currentName = name.shift();
 
     var routeComponent = {};
     Children.map(children, (child) => {
       if (indexRoute) {
         if (child.type.displayName === 'IndexRoute') {
-          routeComponent = this._childOr(child);
+          routeComponent = this._childOr(name, child);
         }
       } else if (child.props.name === currentName) {
-        routeComponent = this._childOr(child);
+        routeComponent = this._childOr(name, child);
       }
     });
 
-    return name.length > 1 ?
-      this.getRouteComponent(name.join('/'), routeComponent.props.children)
+    return name.length > 0 ?
+      this.getRouteComponent(name.join('/'), routeComponent.children)
       :
       routeComponent;
   },
