@@ -3,6 +3,8 @@ React Native routing system based on react router
 
 # Change Log:
 
+ - _2.1.3_ : Fix for active link styles.
+
  - _2.1.2_ : Fix for choosing parent component.
 
  - _2.1.0_ : Add `defaultTransition` prop to `Router` allowing to change the default transition from `None`.

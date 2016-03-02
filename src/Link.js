@@ -45,12 +45,15 @@ var Link = React.createClass({
   },
 
   render() {
-    var children = Children.map(this.props.children, (child) => {
-      var style = typeof this.props.linkStyle !== 'undefined' ? this.props.linkStyle : styles.link;
+    var style = typeof this.props.linkStyle !== 'undefined' ? this.props.linkStyle : styles.link;
+    var to = this.props.to.split('/');
+    let name = this.context.route.name;
 
-      if (this.props.to === this.context.route.name) {
-        style = typeof this.props.activeLinkStyle !== 'undefined' ? this.props.activeLinkStyle : styles.linkActive;
-      }
+    if (to[to.length - 1] === name || this.props.to === name) {
+      style = typeof this.props.activeLinkStyle !== 'undefined' ? this.props.activeLinkStyle : styles.linkActive;
+    }
+
+    var children = Children.map(this.props.children, (child) => {
 
       if (typeof child.props.style !== 'undefined') {
         if (child.props.style instanceof Array) {
@@ -65,7 +68,7 @@ var Link = React.createClass({
 
     if (this.props.type === 'Opacity') {
       return (
-        <TouchableOpacity style={this.props.style} onPress={this.handlePress}>
+        <TouchableOpacity style={[this.props.style, style]} onPress={this.handlePress}>
           {children}
         </TouchableOpacity>
       );
