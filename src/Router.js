@@ -87,15 +87,11 @@ var Router = React.createClass({
 
     var routeComponent = {};
     Children.forEach(children, (child) => {
-      if (indexRoute) {
-        if (child.type.displayName === 'IndexRoute') {
-          routeComponent = this._childOr(name, child, routeProps);
-        }
+      if ((indexRoute && child.type.displayName === 'IndexRoute') || child.props.name === currentName) {
+        routeComponent = this.cloneProps(child.props);
       } else if (child.props.name.indexOf(':') === 0) {
         routeProps[child.props.name.replace(':', '')] = currentName;
-        routeComponent = this._childOr(name, child, routeProps);
-      } else if (child.props.name === currentName) {
-        routeComponent = this._childOr(name, child, routeProps);
+        routeComponent = this.cloneProps(child.props);
       }
     });
 
@@ -103,6 +99,10 @@ var Router = React.createClass({
       routeComponent.parent = directParent;
     }
     routeComponent.routeProps = routeProps;
+
+    if (name.length === 0 && Children.count(routeComponent.children) > 0) {
+      routeComponent = this.getRouteComponent('', routeComponent.children, routeComponent, routeProps);
+    }
 
     return name.length > 0 ?
       this.getRouteComponent(name.join('/'), routeComponent.children, routeComponent, routeProps)
