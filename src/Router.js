@@ -112,11 +112,21 @@ var Router = React.createClass({
 
   getInitalRoute() {
     var componentProps = this.getRouteComponent('');
+    let component = componentProps.component;
+    let props = {};
+
+    if (typeof componentProps.parent !== 'undefined' && typeof componentProps.parent.component !== 'undefined') {
+      component = Wrapper;
+      props = Object.assign({}, props, {
+        parent: componentProps.parent.component,
+        child: componentProps.component
+      });
+    }
 
     return {
       name: componentProps.name || 'inital route',
-      component: componentProps.component,
-      props: {},
+      component: component,
+      props: props,
       sceneConfig: this.props.defaultTransition
     };
   },

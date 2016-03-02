@@ -3,7 +3,7 @@ React Native routing system based on react router
 
 # Change Log:
 
-- _2.1.0_ : Add `defaultTransition` prop to `Router` allowing to change the default transition from `None`.
+ - _2.1.0_ : Add `defaultTransition` prop to `Router` allowing to change the default transition from `None`.
 
  - _2.0.0_ : Add `None` and `Fade` transitions and default transitions to `None`.
  This is a breaking change for those relying on a transition when none has been supplied.
