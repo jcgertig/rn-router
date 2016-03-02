@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react-native');
-var { View, Navigator, Children, PropTypes } = React;
+var { View, Navigator, Children, PropTypes, createElement } = React;
 
 var Wrapper = require('./Wrapper');
 var Transitions = require('./Transitions');
@@ -113,26 +113,41 @@ var Router = React.createClass({
   getInitalRoute() {
     var componentProps = this.getRouteComponent('');
     let component = componentProps.component;
-    let props = {};
 
     if (typeof componentProps.parent !== 'undefined' && typeof componentProps.parent.component !== 'undefined') {
-      component = Wrapper;
-      props = Object.assign({}, props, {
-        parent: componentProps.parent.component,
-        child: componentProps.component
-      });
+      component = this._getWrapper(componentProps);
     }
 
     return {
       name: componentProps.name || 'inital route',
       component: component,
-      props: props,
+      props: {},
       sceneConfig: this.props.defaultTransition
     };
   },
 
   transitionBack() {
     this.refs.navigator.pop();
+  },
+
+  _getWrapper(componentProps) {
+    let WrapperComponent = this._getWrapperComponent(componentProps);
+    return () => { return WrapperComponent; }
+  },
+
+  _getWrapperComponent(componentProps, child) {
+    let wrapper;
+    let parent = componentProps.parent;
+    if (typeof child !== 'undefined') {
+      wrapper = createElement(Wrapper, { parent: parent.component, child: child });
+    } else {
+      wrapper = createElement(Wrapper, { parent: parent.component, child: createElement(componentProps.component) });
+    }
+
+    if (typeof parent.parent !== 'undefined' && typeof parent.parent.component !== 'undefined') {
+      return this._getWrapperComponent(parent, wrapper);
+    }
+    return wrapper;
   },
 
   transitionTo(name, props, sceneConfig) {
@@ -144,8 +159,7 @@ var Router = React.createClass({
     let component = componentProps.component;
     props = Object.assign({}, props, componentProps.routeProps);
     if (typeof componentProps.parent !== 'undefined' && typeof componentProps.parent.component !== 'undefined') {
-      component = Wrapper;
-      props = Object.assign({}, props, { parent: componentProps.parent.component, child: componentProps.component });
+      component = this._getWrapper(componentProps);
     }
     if (typeof component !== 'undefined') {
       navigator.push({
@@ -158,7 +172,7 @@ var Router = React.createClass({
   },
 
   renderScene(route, navigator) {
-    return React.createElement(route.component, route.props);
+    return createElement(route.component, route.props);
   },
 
   configureScene(route) {

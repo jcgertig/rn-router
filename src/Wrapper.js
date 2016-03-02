@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react-native');
+var { cloneElement } = React;
 
 var RouteWrapper = React.createClass({
   displayName: 'RouteWrapper',
@@ -13,7 +14,7 @@ var RouteWrapper = React.createClass({
 
     return (
       <Parent {...props}>
-        <Child {...props} />
+        {cloneElement(Child, props)}
       </Parent>
     )
   }
