@@ -47,36 +47,23 @@ var Link = React.createClass({
   render() {
     var style = typeof this.props.linkStyle !== 'undefined' ? this.props.linkStyle : styles.link;
     var to = this.props.to.split('/');
-    let name = this.context.route.name;
+    let { name, routeName } = this.context.route;
 
-    if (to[to.length - 1] === name || this.props.to === name) {
+    if (to[to.length - 1] === name || this.props.to === name || to[to.length - 1] === routeName) {
       style = typeof this.props.activeLinkStyle !== 'undefined' ? this.props.activeLinkStyle : styles.linkActive;
     }
-
-    var children = Children.map(this.props.children, (child) => {
-
-      if (typeof child.props.style !== 'undefined') {
-        if (child.props.style instanceof Array) {
-          style = child.props.style.push(style);
-        } else {
-          style = [child.props.style, style];
-        }
-      }
-
-      return React.cloneElement(child, { style });
-    });
 
     if (this.props.type === 'Opacity') {
       return (
         <TouchableOpacity style={[this.props.style, style]} onPress={this.handlePress}>
-          {children}
+          {this.props.children}
         </TouchableOpacity>
       );
     } else {
       return (
         <TouchableHighlight underlayColor={this.props.underlayColor} style={this.props.style} onPress={this.handlePress}>
           <View>
-            {children}
+            {this.props.children}
           </View>
         </TouchableHighlight>
       );

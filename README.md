@@ -3,6 +3,8 @@ React Native routing system based on react router
 
 # Change Log:
 
+ - _2.1.5_ : Fix `transitionBack` for sub wrapped routes.
+
  - _2.1.4_ : Fix for sub wrapped routes.
 
  - _2.1.3_ : Fix for active link styles.

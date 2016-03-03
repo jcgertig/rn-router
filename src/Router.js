@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react-native');
-var { View, Navigator, Children, PropTypes, createElement } = React;
+var { View, Navigator, Children, PropTypes, createElement, InteractionManager } = React;
 
 var Wrapper = require('./Wrapper');
 var Transitions = require('./Transitions');
@@ -81,7 +81,7 @@ var Router = React.createClass({
     routeProps = typeof routeProps === 'undefined' ? {} : routeProps;
     children = typeof children === 'undefined' ? this.props.children : children;
 
-    let indexRoute = (name === '' || name === '/');
+    let indexRoute = (name === '' || name === '/' || name === 'root');
     name = this.clone(name).split('/');
     let currentName = name.shift();
 
@@ -119,15 +119,12 @@ var Router = React.createClass({
     }
 
     return {
-      name: componentProps.name || 'inital route',
+      name: 'root',
+      routeName: componentProps.name,
       component: component,
       props: {},
       sceneConfig: this.props.defaultTransition
     };
-  },
-
-  transitionBack() {
-    this.refs.navigator.pop();
   },
 
   _getWrapper(componentProps) {
@@ -150,23 +147,44 @@ var Router = React.createClass({
     return wrapper;
   },
 
-  transitionTo(name, props, sceneConfig) {
+  _buildRoute(name, props, sceneConfig) {
     props = typeof props === 'undefined' ? {} : props;
     props = typeof props === 'object' ? props : {};
-
-    var navigator = this.refs.navigator;
     var componentProps = this.getRouteComponent(name);
     let component = componentProps.component;
     props = Object.assign({}, props, componentProps.routeProps);
     if (typeof componentProps.parent !== 'undefined' && typeof componentProps.parent.component !== 'undefined') {
       component = this._getWrapper(componentProps);
     }
-    if (typeof component !== 'undefined') {
-      navigator.push({
-        name: name,
-        component: component,
-        props: props,
-        sceneConfig: sceneConfig || this.props.defaultTransition
+    console.log(typeof componet);
+
+    return {
+      name: name,
+      routeName: componentProps.name,
+      component: component,
+      props: props,
+      sceneConfig: sceneConfig || this.props.defaultTransition
+    };
+  },
+
+  transitionTo(name, props, sceneConfig) {
+    var navigator = this.refs.navigator;
+    let route = this._buildRoute(name, props, sceneConfig);
+
+    if (typeof route.component !== 'undefined') {
+      navigator.push(route);
+    }
+  },
+
+  transitionBack() {
+    let {lastRoute} = this.state;
+    let route = this._buildRoute(lastRoute.name, lastRoute.props, lastRoute.sceneConfig);
+
+    console.log(route.name, typeof route.componet);
+    if (typeof route.component !== 'undefined') {
+      this.refs.navigator.replacePrevious(route);
+      InteractionManager.runAfterInteractions(() => {
+        this.refs.navigator.pop();
       });
     }
   },
