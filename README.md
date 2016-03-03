@@ -3,6 +3,9 @@ React Native routing system based on react router
 
 # Change Log:
 
+ - _2.1.5_ : Fix `lastRoute` and in so doing correcting routes deeper than 2
+ for `transitionBack`.
+
  - _2.1.5_ : Fix `transitionBack` for sub wrapped routes.
 
  - _2.1.4_ : Fix for sub wrapped routes.
@@ -11,7 +14,8 @@ React Native routing system based on react router
 
  - _2.1.2_ : Fix for choosing parent component.
 
- - _2.1.0_ : Add `defaultTransition` prop to `Router` allowing to change the default transition from `None`.
+ - _2.1.0_ : Add `defaultTransition` prop to `Router` allowing to change the
+ default transition from `None`.
 
  - _2.0.0_ : Add `None` and `Fade` transitions and default transitions to `None`.
  This is a breaking change for those relying on a transition when none has been supplied.

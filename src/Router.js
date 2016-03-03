@@ -32,8 +32,24 @@ var Router = React.createClass({
   getInitialState() {
     return {
       route: this.getInitalRoute(),
-      lastRoute: null
     };
+  },
+
+  getChildContext() {
+    return {
+      platform: this.props.platform || 'undefined',
+      route: this.state.route,
+      lastRoute: this._getLastRoute(),
+      transitionTo: this.transitionTo,
+      transitionBack: this.transitionBack
+    };
+  },
+
+  _getLastRoute() {
+    if (typeof this.refs.navigator === 'undefined') { return null; }
+    let routes = this.refs.navigator.getCurrentRoutes();
+    if (routes.length - 2 < 0) { return null; }
+    return routes[routes.length - 2];
   },
 
   clone(array) {
@@ -57,24 +73,6 @@ var Router = React.createClass({
       component: props.component,
     };
     return clone;
-  },
-
-  getChildContext() {
-    return {
-      platform: this.props.platform || 'undefined',
-      route: this.state.route,
-      lastRoute: this.state.lastRoute,
-      transitionTo: this.transitionTo,
-      transitionBack: this.transitionBack
-    };
-  },
-
-  _childOr(name, child, routeProps) {
-    let props = child.props;
-    if (name.length === 0 && Children.count(props.children) > 0) {
-      props =  this.getRouteComponent('', props.children, props, routeProps);
-    }
-    return this.cloneProps(props);
   },
 
   getRouteComponent(name, children, directParent, routeProps) {
@@ -156,7 +154,6 @@ var Router = React.createClass({
     if (typeof componentProps.parent !== 'undefined' && typeof componentProps.parent.component !== 'undefined') {
       component = this._getWrapper(componentProps);
     }
-    console.log(typeof componet);
 
     return {
       name: name,
@@ -177,15 +174,16 @@ var Router = React.createClass({
   },
 
   transitionBack() {
-    let {lastRoute} = this.state;
-    let route = this._buildRoute(lastRoute.name, lastRoute.props, lastRoute.sceneConfig);
+    let lastRoute = this._getLastRoute();
+    if (lastRoute !== null) {
+      let route = this._buildRoute(lastRoute.name, lastRoute.props, lastRoute.sceneConfig);
 
-    console.log(route.name, typeof route.componet);
-    if (typeof route.component !== 'undefined') {
-      this.refs.navigator.replacePrevious(route);
-      InteractionManager.runAfterInteractions(() => {
-        this.refs.navigator.pop();
-      });
+      if (typeof route.component !== 'undefined') {
+        this.refs.navigator.replacePrevious(route);
+        InteractionManager.runAfterInteractions(() => {
+          this.refs.navigator.pop();
+        });
+      }
     }
   },
 
@@ -195,7 +193,7 @@ var Router = React.createClass({
 
   configureScene(route) {
     if (this.state.route !== route) {
-      this.setState({ lastRoute: this.state.route, route: route });
+      this.setState({ route: route });
     }
     return route.sceneConfig;
   },
