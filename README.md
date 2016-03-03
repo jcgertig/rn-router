@@ -3,7 +3,9 @@ React Native routing system based on react router
 
 # Change Log:
 
- - _2.1.5_ : Fix `lastRoute` and in so doing correcting routes deeper than 2
+ - _2.2.0_ : Add `activeChildStyle` to link to pass a style to a child if link active.
+
+ - _2.1.6_ : Fix `lastRoute` and in so doing correcting routes deeper than 2
  for `transitionBack`.
 
  - _2.1.5_ : Fix `transitionBack` for sub wrapped routes.
