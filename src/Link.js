@@ -60,7 +60,6 @@ var Link = React.createClass({
     var children = Children.map(this.props.children, (child) => {
       if (child !== null) {
         if (typeof child.props.style !== 'undefined') {
-          console.log('childSTyle', childStyle);
           if (child.props.style instanceof Array) {
             childStyle = child.props.style.push(childStyle);
           } else {

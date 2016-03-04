@@ -3,6 +3,9 @@ React Native routing system based on react router
 
 # Change Log:
 
+ - _2.2.1_ : Small performance improvement around try to navigate to the current route.
+ And add a transition to remove gestures from a transition.
+
  - _2.2.0_ : Add `activeChildStyle` to link to pass a style to a child if link active.
 
  - _2.1.6_ : Fix `lastRoute` and in so doing correcting routes deeper than 2
@@ -250,4 +253,5 @@ Transitions.VerticalUpSwipeJump
 Transitions.VerticalDownSwipeJump
 Transitions.None
 Transitions.Fade
+Transitions.NoGestures(Transitions.FloatFromBottom)
 ```

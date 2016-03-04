@@ -165,10 +165,11 @@ var Router = React.createClass({
   },
 
   transitionTo(name, props, sceneConfig) {
+    let lastRoute = this.state.route;
     var navigator = this.refs.navigator;
     let route = this._buildRoute(name, props, sceneConfig);
 
-    if (typeof route.component !== 'undefined') {
+    if (typeof route.component !== 'undefined' && lastRoute.name !== route.name) {
       navigator.push(route);
     }
   },

@@ -94,7 +94,12 @@ let FadeConfig = Object.assign({}, NoneConfig, {
   },
 });
 
+let removeGestures = function(transition) {
+  return Object.assign({}, transition, {gestures: {}});
+};
+
 module.exports = Object.assign({}, React.Navigator.SceneConfigs, {
   None: NoneConfig,
   Fade: FadeConfig,
+  NoGestures: removeGestures,
 });
