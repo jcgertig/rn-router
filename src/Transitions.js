@@ -57,13 +57,8 @@ let FadeOut = {
 
 let None = {
   opacity: {
-    from: 1,
-    to: 1,
-    min: 0,
-    max: 1,
-    type: 'linear',
-    extrapolate: false,
-    round: 100,
+    value: 1.0,
+    type: 'constant',
   },
 };
 
@@ -74,11 +69,11 @@ let NoneConfig = {
   },
 
   // Rebound spring parameters when transitioning FROM this scene
-  springFriction: 26,
-  springTension: 200,
+  springFriction: 1,
+  springTension: 1000,
 
   // Velocity to start at when transitioning without gesture
-  defaultTransitionVelocity: 1,
+  defaultTransitionVelocity: 100,
 
   // Animation interpolators for horizontal transitioning:
   animationInterpolators: {
@@ -87,12 +82,18 @@ let NoneConfig = {
   },
 };
 
-let FadeConfig = Object.assign({}, NoneConfig, {
+let FadeConfig = {
+  gestures: {
+    pop: BaseLeftToRightGesture,
+  },
+  springFriction: 26,
+  springTension: 200,
+  defaultTransitionVelocity: 1.5,
   animationInterpolators: {
     into: buildStyleInterpolator(FadeIn),
     out: buildStyleInterpolator(FadeOut),
   },
-});
+};
 
 let removeGestures = function(transition) {
   return Object.assign({}, transition, {gestures: {}});

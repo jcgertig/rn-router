@@ -3,6 +3,8 @@ React Native routing system based on react router
 
 # Change Log:
 
+ - _2.2.2_ : Small fixes for None transition and default transition.
+
  - _2.2.1_ : Small performance improvement around try to navigate to the current route.
  And add a transition to remove gestures from a transition.
 

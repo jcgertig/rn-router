@@ -148,6 +148,7 @@ var Router = React.createClass({
   _buildRoute(name, props, sceneConfig) {
     props = typeof props === 'undefined' ? {} : props;
     props = typeof props === 'object' ? props : {};
+    sceneConfig = typeof sceneConfig === 'undefined' ? this.props.defaultTransition : sceneConfig;
     var componentProps = this.getRouteComponent(name);
     let component = componentProps.component;
     props = Object.assign({}, props, componentProps.routeProps);
@@ -160,7 +161,7 @@ var Router = React.createClass({
       routeName: componentProps.name,
       component: component,
       props: props,
-      sceneConfig: sceneConfig || this.props.defaultTransition
+      sceneConfig: sceneConfig
     };
   },
 
@@ -170,7 +171,9 @@ var Router = React.createClass({
     let route = this._buildRoute(name, props, sceneConfig);
 
     if (typeof route.component !== 'undefined' && lastRoute.name !== route.name) {
-      navigator.push(route);
+      InteractionManager.runAfterInteractions(() => {
+        navigator.push(route);
+      });
     }
   },
 
