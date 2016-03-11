@@ -3,6 +3,8 @@ React Native routing system based on react router
 
 # Change Log:
 
+ - _2.2.3_ : Small fix for styles on `Links`
+
  - _2.2.2_ : Small fixes for None transition and default transition.
 
  - _2.2.1_ : Small performance improvement around try to navigate to the current route.
