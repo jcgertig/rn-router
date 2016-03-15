@@ -3,6 +3,9 @@ React Native routing system based on react router
 
 # Change Log:
 
+ - _2.2.4_ : Fix for passing props to routes that render inside wrapping
+ components.
+
  - _2.2.3_ : Small fix for styles on `Links`
 
  - _2.2.2_ : Small fixes for None transition and default transition.

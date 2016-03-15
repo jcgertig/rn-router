@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react-native');
-var { View, Navigator, Children, PropTypes, createElement, InteractionManager } = React;
+var { View, Navigator, Children, PropTypes, createElement, createClass, InteractionManager } = React;
 
 var Wrapper = require('./Wrapper');
 var Transitions = require('./Transitions');
@@ -113,7 +113,7 @@ var Router = React.createClass({
     let component = componentProps.component;
 
     if (typeof componentProps.parent !== 'undefined' && typeof componentProps.parent.component !== 'undefined') {
-      component = this._getWrapper(componentProps);
+      component = this._getWrapper(componentProps, createElement(component));
     }
 
     return {
@@ -125,19 +125,19 @@ var Router = React.createClass({
     };
   },
 
-  _getWrapper(componentProps) {
-    let WrapperComponent = this._getWrapperComponent(componentProps);
-    return () => { return WrapperComponent; }
+  _getWrapper(componentProps, child) {
+    let router = this;
+    return createClass({
+      displayName: 'RouteWrapper',
+      render: function() {
+        return router._getWrapperComponent(componentProps, child);
+      }
+    });
   },
 
   _getWrapperComponent(componentProps, child) {
-    let wrapper;
     let parent = componentProps.parent;
-    if (typeof child !== 'undefined') {
-      wrapper = createElement(Wrapper, { parent: parent.component, child: child });
-    } else {
-      wrapper = createElement(Wrapper, { parent: parent.component, child: createElement(componentProps.component) });
-    }
+    let wrapper = createElement(Wrapper, { parent: parent.component, child });
 
     if (typeof parent.parent !== 'undefined' && typeof parent.parent.component !== 'undefined') {
       return this._getWrapperComponent(parent, wrapper);
@@ -149,11 +149,12 @@ var Router = React.createClass({
     props = typeof props === 'undefined' ? {} : props;
     props = typeof props === 'object' ? props : {};
     sceneConfig = typeof sceneConfig === 'undefined' ? this.props.defaultTransition : sceneConfig;
-    var componentProps = this.getRouteComponent(name);
+
+    let componentProps = this.getRouteComponent(name);
     let component = componentProps.component;
     props = Object.assign({}, props, componentProps.routeProps);
     if (typeof componentProps.parent !== 'undefined' && typeof componentProps.parent.component !== 'undefined') {
-      component = this._getWrapper(componentProps);
+      component = this._getWrapper(componentProps, createElement(componentProps.component, props));
     }
 
     return {
