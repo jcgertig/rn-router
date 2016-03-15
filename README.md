@@ -3,6 +3,9 @@ React Native routing system based on react router
 
 # Change Log:
 
+ - _2.3.0_ : Add `routeWillFocus` and `routeDidFocus` events that can be
+ listened for.
+
  - _2.2.4_ : Fix for passing props to routes that render inside wrapping
  components.
 
@@ -14,29 +17,6 @@ React Native routing system based on react router
  And add a transition to remove gestures from a transition.
 
  - _2.2.0_ : Add `activeChildStyle` to link to pass a style to a child if link active.
-
- - _2.1.6_ : Fix `lastRoute` and in so doing correcting routes deeper than 2
- for `transitionBack`.
-
- - _2.1.5_ : Fix `transitionBack` for sub wrapped routes.
-
- - _2.1.4_ : Fix for sub wrapped routes.
-
- - _2.1.3_ : Fix for active link styles.
-
- - _2.1.2_ : Fix for choosing parent component.
-
- - _2.1.0_ : Add `defaultTransition` prop to `Router` allowing to change the
- default transition from `None`.
-
- - _2.0.0_ : Add `None` and `Fade` transitions and default transitions to `None`.
- This is a breaking change for those relying on a transition when none has been supplied.
-
- - _1.3.x_ : Add url parameters
-
- - _1.2.x_ : Add passing of children to parent route
-
- - _1.1.x_ : Add sub routing
 
 # How to use:
 
@@ -206,6 +186,30 @@ render() {
   - route : the route object ( name, component, props, sceneConfig )
   - transitionTo : transition function params (name, props(optional), transitionFunction(optional))
   - transitionBack : transition to last route
+  - events : event listener for `routeWillFocus` and `routeDidFocus` events
+
+## Example - Usage ( events )
+
+```js
+var ReactRouter = require('rn-router');
+
+...
+
+contextTypes: {
+  events: React.PropTypes.object
+},
+
+...
+
+this.context.events.on('routeWillFocus', (route) => {
+  this.setState({transitionStarted: true});
+});
+
+this.context.events.on('routeDidFocus', (route) => {
+  this.setState({fullyRouted: true});
+});
+
+```
 
 ## Example - Usage ( transitionTo / transitionBack )
 

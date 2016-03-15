@@ -1,7 +1,12 @@
 'use strict';
 
 var React = require('react-native');
-var { View, Navigator, Children, PropTypes, createElement, createClass, InteractionManager } = React;
+var EventEmitter = require('event-emitter');
+
+var {
+  View, Navigator, Children, PropTypes, createElement, createClass,
+  InteractionManager
+} = React;
 
 var Wrapper = require('./Wrapper');
 var Transitions = require('./Transitions');
@@ -10,12 +15,15 @@ var Router = React.createClass({
 
   displayName: 'Router',
 
+  eventEmitter: null,
+
   childContextTypes: {
     platform: PropTypes.string,
     route: PropTypes.object,
     lastRoute: PropTypes.object,
     transitionTo: PropTypes.func,
-    transitionBack: PropTypes.func
+    transitionBack: PropTypes.func,
+    events: PropTypes.object,
   },
 
   propTypes: {
@@ -41,8 +49,18 @@ var Router = React.createClass({
       route: this.state.route,
       lastRoute: this._getLastRoute(),
       transitionTo: this.transitionTo,
-      transitionBack: this.transitionBack
+      transitionBack: this.transitionBack,
+      events: this.eventEmitter,
     };
+  },
+
+  componentWillMount() {
+    this.eventEmitter = EventEmitter({});
+  },
+
+  componentDidMount() {
+    this.refs.navigator.navigationContext.addListener('willfocus', this.emitWillFocus);
+    this.refs.navigator.navigationContext.addListener('didfocus', this.emitDidFocus);
   },
 
   _getLastRoute() {
@@ -203,11 +221,19 @@ var Router = React.createClass({
     return route.sceneConfig;
   },
 
+  emitWillFocus(route) {
+    this.eventEmitter.emit('routeWillFocus', { route: route });
+  },
+
+  emitDidFocus(route) {
+    this.eventEmitter.emit('routeDidFocus', { route: route });
+  },
+
   render() {
     var navProps = {
       initialRoute: this.state.route,
       configureScene: this.configureScene,
-      renderScene: this.renderScene
+      renderScene: this.renderScene,
     };
 
     return (
