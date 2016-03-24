@@ -5,10 +5,9 @@ var EventEmitter = require('event-emitter');
 
 var {
   View, Navigator, Children, PropTypes, createElement, createClass,
-  InteractionManager
+  InteractionManager, cloneElement
 } = React;
 
-var Wrapper = require('./Wrapper');
 var Transitions = require('./Transitions');
 
 var Router = React.createClass({
@@ -102,12 +101,16 @@ var Router = React.createClass({
     let currentName = name.shift();
 
     var routeComponent = {};
+    let found = false;
     Children.forEach(children, (child) => {
+      if (found) { return; }
       if ((indexRoute && child.type.displayName === 'IndexRoute') || child.props.name === currentName) {
         routeComponent = this.cloneProps(child.props);
+        found = true;
       } else if (child.props.name.indexOf(':') === 0) {
         routeProps[child.props.name.replace(':', '')] = currentName;
         routeComponent = this.cloneProps(child.props);
+        found = true;
       }
     });
 
@@ -128,39 +131,119 @@ var Router = React.createClass({
 
   getInitalRoute() {
     var componentProps = this.getRouteComponent('');
-    let component = componentProps.component;
+    let {component, parent, name} = componentProps;
 
-    if (typeof componentProps.parent !== 'undefined' && typeof componentProps.parent.component !== 'undefined') {
+    if (typeof parent !== 'undefined' && typeof parent.component !== 'undefined') {
       component = this._getWrapper(componentProps, createElement(component));
     }
 
     return {
       name: 'root',
-      routeName: componentProps.name,
+      routeName: name,
       component: component,
       props: {},
       sceneConfig: this.props.defaultTransition
     };
   },
 
-  _getWrapper(componentProps, child) {
-    let router = this;
-    return createClass({
-      displayName: 'RouteWrapper',
-      render: function() {
-        return router._getWrapperComponent(componentProps, child);
-      }
-    });
+  _buildStack(stack) {
+    if (stack.length === 0) {
+      return stack;
+    }
+    if (stack.length === 1) {
+      return cloneElement(stack[0], { key: stack[0].type.name + '.0' });
+    }
+
+    let parent = stack.shift();
+    let child = this._buildStack(stack);
+    let el = cloneElement(parent, {}, [child]);
+    return el;
   },
 
-  _getWrapperComponent(componentProps, child) {
-    let parent = componentProps.parent;
-    let wrapper = createElement(Wrapper, { parent: parent.component, child });
-
-    if (typeof parent.parent !== 'undefined' && typeof parent.parent.component !== 'undefined') {
-      return this._getWrapperComponent(parent, wrapper);
+  _getWrapper(componentProps, child, matching) {
+    let stack = this._getWrapperStack(componentProps.parent);
+    stack.push(child);
+    if (typeof matching === 'undefined') {
+      return this._buildStack(stack);
     }
-    return wrapper;
+
+    let { component } = this._getLastRoute();
+    let realChild = component.props.children[0];
+    let newStack = [component, realChild];
+    for (let i = 0; i < matching.matched; i++) {
+      if (i < matching.matched - 2) {
+        newStack.push(realChild.props.children[0]);
+        realChild = realChild.props.children[0];
+      }
+      stack.shift();
+    }
+    let built = this._buildStack(stack);
+    newStack = newStack.concat(built);
+    return this._buildStack(newStack);
+  },
+
+  _name(comp) {
+    return comp.displayName || comp.name || comp.constructor.name;
+  },
+
+  _getWrapperStack(componentProps) {
+    let { parent, component, routeProps } = componentProps;
+    let und = 'undefined';
+    if (typeof parent !== und && typeof parent.component !== und) {
+      let stack = this._getWrapperStack(parent);
+      let props = Object.assign({}, routeProps, {
+        key: this._name(component) + '.' + stack.length
+      });
+      let comp = createElement(component, props);
+      stack.push(comp);
+      return stack;
+    }
+
+    let props = Object.assign({}, routeProps, {
+      key: this._name(component) + '.0'
+    });
+    let comp = createElement(component, props);
+    return [comp];
+  },
+
+  _getMatchingParts(name, lastRoute) {
+    let broken = name.split('/');
+    let count = 0;
+
+    let lastName = lastRoute.name.split('/').reverse();
+    if (lastName.indexOf(lastRoute.routeName) !== 0) {
+      lastName.reverse().push(lastRoute.routeName);
+    } else {
+      lastName.reverse();
+    }
+
+    let total = lastName.length;
+    for (let i = 0; i < total; i++) {
+      if (lastName[i] === broken[i]) {
+        count++;
+      } else {
+        break;
+      }
+    }
+
+    return {
+      matched: count,
+      of: total,
+      currentName: broken.join('/'),
+      lastName: lastName.join('/')
+    };
+  },
+
+  _lastRouteMatches(name, lastRoute, all) {
+    if (lastRoute === null) {
+      return false;
+    }
+    if (all) {
+      return (name === lastRoute.name || name === lastRoute.name + '/' + lastRoute.routeName);
+    }
+
+    let matching = this._getMatchingParts(name, lastRoute);
+    return matching.matched > 0;
   },
 
   _buildRoute(name, props, sceneConfig) {
@@ -168,11 +251,20 @@ var Router = React.createClass({
     props = typeof props === 'object' ? props : {};
     sceneConfig = typeof sceneConfig === 'undefined' ? this.props.defaultTransition : sceneConfig;
 
+    let matching;
+    let lastRoute = this._getLastRoute();
+    if (lastRoute !== null && this._lastRouteMatches(name, lastRoute, false)) {
+      matching = this._getMatchingParts(name, lastRoute);
+    }
+
     let componentProps = this.getRouteComponent(name);
+    let { routeProps, parent } = componentProps;
+    props = Object.assign({}, props, routeProps);
+
     let component = componentProps.component;
-    props = Object.assign({}, props, componentProps.routeProps);
-    if (typeof componentProps.parent !== 'undefined' && typeof componentProps.parent.component !== 'undefined') {
-      component = this._getWrapper(componentProps, createElement(componentProps.component, props));
+    if (typeof parent !== 'undefined' && typeof parent.component !== 'undefined') {
+      let el = createElement(componentProps.component, props);
+      component = this._getWrapper(componentProps, el, matching);
     }
 
     return {
@@ -189,7 +281,7 @@ var Router = React.createClass({
     var navigator = this.refs.navigator;
     let route = this._buildRoute(name, props, sceneConfig);
 
-    if (typeof route.component !== 'undefined' && lastRoute.name !== route.name) {
+    if (typeof route.component !== 'undefined' && !this._lastRouteMatches(route.name, lastRoute, true)) {
       InteractionManager.runAfterInteractions(() => {
         navigator.push(route);
       });
@@ -211,7 +303,7 @@ var Router = React.createClass({
   },
 
   renderScene(route, navigator) {
-    return createElement(route.component, route.props);
+    return cloneElement(route.component, route.props);
   },
 
   configureScene(route) {
