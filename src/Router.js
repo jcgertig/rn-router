@@ -38,7 +38,7 @@ var Router = React.createClass({
 
   getInitialState() {
     return {
-      route: this.getInitalRoute(),
+      route: this._getInitalRoute(),
     };
   },
 
@@ -47,8 +47,8 @@ var Router = React.createClass({
       platform: this.props.platform || 'undefined',
       route: this.state.route,
       lastRoute: this._getLastRoute(),
-      transitionTo: this.transitionTo,
-      transitionBack: this.transitionBack,
+      transitionTo: this._transitionTo,
+      transitionBack: this._transitionBack,
       events: this.eventEmitter,
     };
   },
@@ -58,33 +58,33 @@ var Router = React.createClass({
   },
 
   componentDidMount() {
-    this.emitDidFocus(this.state.route);
-    this.refs.navigator.navigationContext.addListener('willfocus', this.emitWillFocus);
-    this.refs.navigator.navigationContext.addListener('didfocus', this.emitDidFocus);
+    this._emitDidFocus(this.state.route);
+    this.refs.navigator.navigationContext.addListener('willfocus', this._emitWillFocus);
+    this.refs.navigator.navigationContext.addListener('didfocus', this._emitDidFocus);
   },
 
   _getLastRoute() {
     if (typeof this.refs.navigator === 'undefined') { return null; }
     let routes = this.refs.navigator.getCurrentRoutes();
-    if (routes.length - 2 < 0) { return null; }
+    if (routes.length - 2 < 0) { return null; } // length is 1 or 0
     return routes[routes.length - 2];
   },
 
-  clone(array) {
+  _clone(array) {
     return JSON.parse(JSON.stringify(array));
   },
 
-  cloneProps(props) {
+  _cloneProps(props) {
     let clone = {
       name: props.name || '',
       component: props.component,
       children: props.children,
-      parent: this.clonePropsBase(props.parent)
+      parent: this._clonePropsBase(props.parent)
     };
     return clone;
   },
 
-  clonePropsBase(props) {
+  _clonePropsBase(props) {
     if (typeof props === 'undefined') { return props; }
     let clone = {
       name: props.name || '',
@@ -93,12 +93,12 @@ var Router = React.createClass({
     return clone;
   },
 
-  getRouteComponent(name, children, directParent, routeProps) {
+  _getRouteComponent(name, children, directParent, routeProps) {
     routeProps = typeof routeProps === 'undefined' ? {} : routeProps;
     children = typeof children === 'undefined' ? this.props.children : children;
 
     let indexRoute = (name === '' || name === '/' || name === 'root');
-    name = this.clone(name).split('/');
+    name = this._clone(name).split('/');
     let currentName = name.shift();
 
     var routeComponent = {};
@@ -106,11 +106,11 @@ var Router = React.createClass({
     Children.forEach(children, (child) => {
       if (found) { return; }
       if ((indexRoute && child.type.displayName === 'IndexRoute') || child.props.name === currentName) {
-        routeComponent = this.cloneProps(child.props);
+        routeComponent = this._cloneProps(child.props);
         found = true;
       } else if (child.props.name.indexOf(':') === 0) {
         routeProps[child.props.name.replace(':', '')] = currentName;
-        routeComponent = this.cloneProps(child.props);
+        routeComponent = this._cloneProps(child.props);
         found = true;
       }
     });
@@ -121,17 +121,17 @@ var Router = React.createClass({
     routeComponent.routeProps = routeProps;
 
     if (name.length === 0 && Children.count(routeComponent.children) > 0) {
-      routeComponent = this.getRouteComponent('', routeComponent.children, routeComponent, routeProps);
+      routeComponent = this._getRouteComponent('', routeComponent.children, routeComponent, routeProps);
     }
 
     return name.length > 0 ?
-      this.getRouteComponent(name.join('/'), routeComponent.children, routeComponent, routeProps)
+      this._getRouteComponent(name.join('/'), routeComponent.children, routeComponent, routeProps)
       :
       routeComponent;
   },
 
-  getInitalRoute() {
-    var componentProps = this.getRouteComponent('');
+  _getInitalRoute() {
+    var componentProps = this._getRouteComponent('');
     let {component, parent, name} = componentProps;
 
     if (typeof parent !== 'undefined' && typeof parent.component !== 'undefined') {
@@ -148,12 +148,10 @@ var Router = React.createClass({
   },
 
   _buildStack(stack) {
-    if (stack.length === 0) {
-      return stack;
-    }
-    if (stack.length === 1) {
-      return cloneElement(stack[0], { key: stack[0].type.name + '.0' });
-    }
+    if (stack.length === 0) { return stack; }
+
+    let key = this._name(stack[0]) + '.0';
+    if (stack.length === 1) { return cloneElement(stack[0], {key}); }
 
     let parent = stack.shift();
     let child = this._buildStack(stack);
@@ -258,7 +256,7 @@ var Router = React.createClass({
       matching = this._getMatchingParts(name, lastRoute);
     }
 
-    let componentProps = this.getRouteComponent(name);
+    let componentProps = this._getRouteComponent(name);
     let { routeProps, parent } = componentProps;
     props = Object.assign({}, props, routeProps);
 
@@ -277,7 +275,7 @@ var Router = React.createClass({
     };
   },
 
-  transitionTo(name, props, sceneConfig) {
+  _transitionTo(name, props, sceneConfig) {
     let lastRoute = this.state.route;
     var navigator = this.refs.navigator;
     let route = this._buildRoute(name, props, sceneConfig);
@@ -289,7 +287,7 @@ var Router = React.createClass({
     }
   },
 
-  transitionBack() {
+  _transitionBack() {
     let lastRoute = this._getLastRoute();
     if (lastRoute !== null) {
       let route = this._buildRoute(lastRoute.name, lastRoute.props, lastRoute.sceneConfig);
@@ -303,30 +301,30 @@ var Router = React.createClass({
     }
   },
 
-  renderScene(route, navigator) {
+  _renderScene(route, navigator) {
     return cloneElement(route.component, route.props);
   },
 
-  configureScene(route) {
+  _configureScene(route) {
     if (this.state.route !== route) {
       this.setState({ route: route });
     }
     return route.sceneConfig;
   },
 
-  emitWillFocus(route) {
+  _emitWillFocus(route) {
     this.eventEmitter.emit('routeWillFocus', { route: route });
   },
 
-  emitDidFocus(route) {
+  _emitDidFocus(route) {
     this.eventEmitter.emit('routeDidFocus', { route: route });
   },
 
   render() {
     var navProps = {
       initialRoute: this.state.route,
-      configureScene: this.configureScene,
-      renderScene: this.renderScene,
+      configureScene: this._configureScene,
+      renderScene: this._renderScene,
     };
 
     return (
