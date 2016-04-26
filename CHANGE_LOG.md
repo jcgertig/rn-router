@@ -1,3 +1,7 @@
+- _2.4.2_ : Small code improvements.
+
+- _2.4.0_ : Improvements to how rendering is done.
+
 - _2.3.0_ : Add `routeWillFocus` and `routeDidFocus` events that can be
  listened for.
 

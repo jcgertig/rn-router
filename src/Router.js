@@ -58,7 +58,6 @@ var Router = React.createClass({
   },
 
   componentDidMount() {
-    this._emitDidFocus(this.state.route);
     this.refs.navigator.navigationContext.addListener('willfocus', this._emitWillFocus);
     this.refs.navigator.navigationContext.addListener('didfocus', this._emitDidFocus);
   },
@@ -182,7 +181,7 @@ var Router = React.createClass({
   },
 
   _name(comp) {
-    return comp.displayName || comp.name || comp.constructor.name;
+    return comp.displayName || comp.name || comp.constructor.name || comp.type.name || 'unknown';
   },
 
   _getWrapperStack(componentProps) {
