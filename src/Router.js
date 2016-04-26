@@ -58,6 +58,7 @@ var Router = React.createClass({
   },
 
   componentDidMount() {
+    this.emitDidFocus(this.state.route);
     this.refs.navigator.navigationContext.addListener('willfocus', this.emitWillFocus);
     this.refs.navigator.navigationContext.addListener('didfocus', this.emitDidFocus);
   },
