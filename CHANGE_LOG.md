@@ -1,3 +1,5 @@
+- _2.4.3_ : Fix for routes with no component and correct `transitionBack`.
+
 - _2.4.2_ : Small code improvements.
 
 - _2.4.0_ : Improvements to how rendering is done.

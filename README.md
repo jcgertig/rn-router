@@ -3,7 +3,11 @@ React Native routing system based on react router
 
 # Change Log:
 
-- _2.4.0_ : Improvements to how rendering is done. 
+- _2.4.3_ : Fix for routes with no component and correct `transitionBack`.
+
+- _2.4.2_ : Small code improvements.
+
+- _2.4.0_ : Improvements to how rendering is done.
 
  - _2.3.0_ : Add `routeWillFocus` and `routeDidFocus` events that can be
  listened for.
@@ -12,13 +16,6 @@ React Native routing system based on react router
  components.
 
  - _2.2.3_ : Small fix for styles on `Links`
-
- - _2.2.2_ : Small fixes for None transition and default transition.
-
- - _2.2.1_ : Small performance improvement around try to navigate to the current route.
- And add a transition to remove gestures from a transition.
-
- - _2.2.0_ : Add `activeChildStyle` to link to pass a style to a child if link active.
 
 # How to use:
 

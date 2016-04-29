@@ -187,13 +187,15 @@ var Router = React.createClass({
   _getWrapperStack(componentProps) {
     let { parent, component, routeProps } = componentProps;
     let und = 'undefined';
-    if (typeof parent !== und && typeof parent.component !== und) {
+    if (typeof parent !== und) {
       let stack = this._getWrapperStack(parent);
       let props = Object.assign({}, routeProps, {
         key: this._name(component) + '.' + stack.length
       });
-      let comp = createElement(component, props);
-      stack.push(comp);
+      if (typeof parent.component !== und) {
+        let comp = createElement(component, props);
+        stack.push(comp);
+      }
       return stack;
     }
 
@@ -289,14 +291,9 @@ var Router = React.createClass({
   _transitionBack() {
     let lastRoute = this._getLastRoute();
     if (lastRoute !== null) {
-      let route = this._buildRoute(lastRoute.name, lastRoute.props, lastRoute.sceneConfig);
-
-      if (typeof route.component !== 'undefined') {
-        this.refs.navigator.replacePrevious(route);
-        InteractionManager.runAfterInteractions(() => {
-          this.refs.navigator.pop();
-        });
-      }
+      InteractionManager.runAfterInteractions(() => {
+        this.refs.navigator.pop();
+      });
     }
   },
 
