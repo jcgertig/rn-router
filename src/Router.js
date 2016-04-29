@@ -181,7 +181,10 @@ var Router = React.createClass({
   },
 
   _name(comp) {
-    return comp.displayName || comp.name || comp.constructor.name || comp.type.name || 'unknown';
+    if (typeof comp.displayName !== 'undefined') { return comp.displayName; }
+    else if (typeof comp.name !== 'undefined') { return comp.name; }
+    else if (typeof comp.type.name !== 'undefined') { return comp.type.name; }
+    else { return 'unknown'; }
   },
 
   _getWrapperStack(componentProps) {
