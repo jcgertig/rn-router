@@ -2,6 +2,7 @@
 React Native routing system based on react router
 
 # Change Log:
+- _2.5.1_ : Fix for route with no component.
 
 - _2.5.0_ : Allow to pass props from router in routeProps params.
 
@@ -13,9 +14,6 @@ React Native routing system based on react router
 
  - _2.3.0_ : Add `routeWillFocus` and `routeDidFocus` events that can be
  listened for.
-
- - _2.2.4_ : Fix for passing props to routes that render inside wrapping
- components.
 
 # How to use:
 
