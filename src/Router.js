@@ -181,10 +181,7 @@ var Router = React.createClass({
   },
 
   _name(comp) {
-    if (typeof comp.displayName !== 'undefined') { return comp.displayName; }
-    else if (typeof comp.name !== 'undefined') { return comp.name; }
-    else if (typeof comp.type.name !== 'undefined') { return comp.type.name; }
-    else { return 'unknown'; }
+    return comp.displayName || comp.name || comp.constructor.name || comp.type.name || 'unknown';
   },
 
   _getWrapperStack(componentProps) {
@@ -192,10 +189,10 @@ var Router = React.createClass({
     let und = 'undefined';
     if (typeof parent !== und) {
       let stack = this._getWrapperStack(parent);
-      let props = Object.assign({}, routeProps, {
-        key: this._name(component) + '.' + stack.length
-      });
       if (typeof component !== und) {
+        let props = Object.assign({}, routeProps, {
+          key: this._name(component) + '.' + stack.length
+        });
         let comp = createElement(component, props);
         stack.push(comp);
       }
