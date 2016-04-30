@@ -2,11 +2,11 @@
 React Native routing system based on react router
 
 # Change Log:
+- _2.5.2_ : Fix issue with `transitionBack`.
+
 - _2.5.1_ : Fix for route with no component.
 
 - _2.5.0_ : Allow to pass props from router in routeProps params.
-
-- _2.4.4_ : Fix for routes with no component and correct `transitionBack`.
 
 - _2.4.2_ : Small code improvements.
 

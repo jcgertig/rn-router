@@ -1,3 +1,5 @@
+- _2.5.2_ : Fix issue with `transitionBack`.
+
 - _2.5.1_ : Fix for route with no component.
 
 - _2.5.0_ : Allow to pass props from router in routeProps params.
