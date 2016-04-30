@@ -291,10 +291,16 @@ var Router = React.createClass({
   _transitionBack() {
     let lastRoute = this._getLastRoute();
     if (lastRoute !== null) {
-      InteractionManager.runAfterInteractions(() => {
-        this.refs.navigator.pop();
-      });
+      let route = this._buildRoute(lastRoute.name, lastRoute.props, lastRoute.sceneConfig);
+
+      if (typeof route.component !== 'undefined') {
+        this.refs.navigator.replacePrevious(route);
+        InteractionManager.runAfterInteractions(() => {
+          this.refs.navigator.pop();
+        });
+      }
     }
+
   },
 
   _renderScene(route, navigator) {
