@@ -135,14 +135,14 @@ var Router = React.createClass({
     let { component, parent, name, routeProps } = componentProps;
 
     if (typeof parent !== 'undefined' && typeof parent.component !== 'undefined') {
-      component = this._getWrapper(componentProps, createElement(component));
+      component = this._getWrapper(componentProps, createElement(component, routeProps || {}));
     }
 
     return {
       name: 'root',
       routeName: name,
       component: component,
-      props: routeProps,
+      props: routeProps || {},
       sceneConfig: this.props.defaultTransition
     };
   },
