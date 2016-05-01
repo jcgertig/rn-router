@@ -1,3 +1,5 @@
+- _2.5.4_ : Fix issue passing `routeProps` to `IndexRoute`.
+
 - _2.5.3_ : Fix issue passing `routeProps`.
 
 - _2.5.2_ : Fix issue with `transitionBack`.
