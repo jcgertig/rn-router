@@ -78,6 +78,7 @@ var Router = React.createClass({
       name: props.name || '',
       component: props.component,
       children: props.children,
+      routeProps: props.routeProps || {},
       parent: this._clonePropsBase(props.parent)
     };
     return clone;
@@ -117,7 +118,7 @@ var Router = React.createClass({
     if (typeof directParent !== 'undefined') {
       routeComponent.parent = directParent;
     }
-    routeComponent.routeProps = Object.assign({}, routeComponent.routeProps || {}, routeProps);
+    routeComponent.routeProps = Object.assign({}, routeComponent.routeProps, routeProps);
 
     if (name.length === 0 && Children.count(routeComponent.children) > 0) {
       routeComponent = this._getRouteComponent('', routeComponent.children, routeComponent, routeProps);
