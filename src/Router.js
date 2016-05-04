@@ -169,7 +169,6 @@ var Router = React.createClass({
     let { component } = this._getLastRoute();
     let realChild = component.props.children[0];
     let newStack = [component, realChild];
-    console.log(matching);
     for (let i = 0; i < matching.matched; i++) {
       if (i < matching.matched - 2) {
         newStack.push(realChild.props.children[0]);
@@ -255,14 +254,12 @@ var Router = React.createClass({
 
     let matching;
     let lastRoute = this._getLastRoute();
-    console.log('last', lastRoute);
     if (lastRoute !== null && this._lastRouteMatches(name, lastRoute, false)) {
       const matchCheck = this._getMatchingParts(name, lastRoute);
       if (matchCheck.matched !== matchCheck.of) {
         matching = this._getMatchingParts(name, lastRoute);
       }
     }
-    console.log('matching', matching);
     let componentProps = this._getRouteComponent(name);
     let { routeProps, parent } = componentProps;
     props = Object.assign({}, props, routeProps);

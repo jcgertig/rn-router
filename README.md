@@ -2,6 +2,8 @@
 React Native routing system based on react router
 
 # Change Log:
+- _2.5.6_ : Fix edge case with `transitionBack`.
+
 - _2.5.4_ : Fix issue passing `routeProps` to `IndexRoute`.
 
 - _2.5.3_ : Fix issue passing `routeProps`.
@@ -16,7 +18,7 @@ React Native routing system based on react router
 
 - _2.4.0_ : Improvements to how rendering is done.
 
- - _2.3.0_ : Add `routeWillFocus` and `routeDidFocus` events that can be
+- _2.3.0_ : Add `routeWillFocus` and `routeDidFocus` events that can be
  listened for.
 
 # How to use:
