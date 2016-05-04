@@ -255,6 +255,7 @@ var Router = React.createClass({
 
     let matching;
     let lastRoute = this._getLastRoute();
+    console.log('last', lastRoute);
     if (lastRoute !== null && this._lastRouteMatches(name, lastRoute, false)) {
       matching = this._getMatchingParts(name, lastRoute);
     }
