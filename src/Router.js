@@ -169,6 +169,7 @@ var Router = React.createClass({
     let { component } = this._getLastRoute();
     let realChild = component.props.children[0];
     let newStack = [component, realChild];
+    console.log(matching);
     for (let i = 0; i < matching.matched; i++) {
       if (i < matching.matched - 2) {
         newStack.push(realChild.props.children[0]);
