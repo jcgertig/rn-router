@@ -257,7 +257,10 @@ var Router = React.createClass({
     let lastRoute = this._getLastRoute();
     console.log('last', lastRoute);
     if (lastRoute !== null && this._lastRouteMatches(name, lastRoute, false)) {
-      matching = this._getMatchingParts(name, lastRoute);
+      const matchCheck = this._getMatchingParts(name, lastRoute);
+      if (matchCheck.matched !== matchCheck.of) {
+        matching = this._getMatchingParts(name, lastRoute);
+      }
     }
     console.log('matching', matching);
     let componentProps = this._getRouteComponent(name);
