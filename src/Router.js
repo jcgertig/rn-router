@@ -4,7 +4,7 @@ var React = require('react');
 var ReactNative = require('react-native');
 var EventEmitter = require('event-emitter');
 
-var { PropTypes, Children, createElement, createClass, cloneElement } = React;
+var { Component, PropTypes, Children, createElement, createClass, cloneElement } = React;
 var { Text, Navigator, InteractionManager } = ReactNative;
 
 var Transitions = require('./Transitions');
@@ -306,7 +306,11 @@ var Router = React.createClass({
   },
 
   _renderScene(route, navigator) {
-    return createElement(route.component, route.props);
+    if (route.component instanceof Component) {
+      return cloneElement(route.component, route.props);
+    } else {
+      return createElement(route.component, route.props);
+    }
   },
 
   _configureScene(route) {
