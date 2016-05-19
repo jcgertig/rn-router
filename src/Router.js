@@ -1,12 +1,11 @@
 'use strict';
 
-var React = require('react-native');
+var React = require('react');
+var ReactNative = require('react-native');
 var EventEmitter = require('event-emitter');
 
-var {
-  View, Navigator, Children, PropTypes, createElement, createClass,
-  InteractionManager, cloneElement
-} = React;
+var { PropTypes, Children, createElement, createClass, cloneElement } = React;
+var { Text, Navigator, InteractionManager } = ReactNative;
 
 var Transitions = require('./Transitions');
 
