@@ -306,7 +306,7 @@ var Router = React.createClass({
   },
 
   _renderScene(route, navigator) {
-    return cloneElement(route.component, route.props);
+    return createElement(route.component, route.props);
   },
 
   _configureScene(route) {
