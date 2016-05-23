@@ -1,3 +1,5 @@
+- _2.5.7_ : Small fix to render scene inspired by @zaynyatyi.
+
 - _2.5.6_ : Fix edge case with `transitionBack`.
 
 - _2.5.4_ : Fix issue passing `routeProps` to `IndexRoute`.

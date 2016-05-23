@@ -307,7 +307,11 @@ var Router = React.createClass({
   },
 
   _renderScene(route, navigator) {
-    return cloneElement(route.component, route.props);
+    if (route.component.$$typeof.toString() === 'Symbol(react.element)') {
+      return cloneElement(route.component, route.props);
+    } else {
+      return createElement(route.component, route.props);
+    }
   },
 
   _configureScene(route) {
