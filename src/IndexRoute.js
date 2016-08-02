@@ -1,7 +1,9 @@
 'use strict';
 
-var React = require('react-native');
-var { StyleSheet, PropTypes } = React;
+var React = require('react');
+var { PropTypes } = React;
+var ReactNative = require('react-native');
+var { StyleSheet } = ReactNative;
 
 var IndexRoute = React.createClass({
   displayName: 'IndexRoute',
