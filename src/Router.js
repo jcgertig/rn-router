@@ -283,7 +283,7 @@ var Router = React.createClass({
     var navigator = this.refs.navigator;
     let route = this._buildRoute(name, props, sceneConfig);
 
-    if (typeof route.component !== 'undefined' && !this._lastRouteMatches(route.name, lastRoute, true)) {
+    if (typeof route.component !== 'undefined') {
       InteractionManager.runAfterInteractions(() => {
         navigator.push(route);
       });
