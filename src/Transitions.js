@@ -1,5 +1,5 @@
-let React = require('react-native');
-const { Navigator, Dimensions, PixelRatio, Easing } = React;
+let ReactNative = require('react-native');
+const { Navigator, Dimensions, PixelRatio, Easing } = ReactNative;
 var buildStyleInterpolator = require('react-native/Libraries/Utilities/buildStyleInterpolator');
 const deviceScreen = Dimensions.get('window');
 

@@ -1,6 +1,5 @@
-import React, {
-  Component, PropTypes, Animated, Dimensions
-} from 'react-native';
+import React, { Component, PropTypes } from 'react';
+import { Animated, Dimensions } from 'react-native';
 
 import Transitions from './Transitions';
 
